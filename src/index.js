@@ -1,39 +1,23 @@
 import readline from 'readline';
+import { promisify } from 'util';
+import  { upDirectory }  from './up/upDirectory.js';
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-function getMessage(message) {
-  console.log(`${message}`);
-}
-
-function parsArguments() {
-  const argument = process.argv[2];
-  if (argument) {
-    return argument.replace('--username=', '');
-  }
-}
-const parsedArgument = parsArguments();
+const parsedArgument = process.argv[2]?.replace('--username=', '');
 
 const userName = parsedArgument? parsedArgument : "Unknown user";
 
 let currentDirectory = process.cwd();
 
-rl.on('SIGINT', () => {
-  exitCommandLine();
-});
-
-console.log(`Welcome to the File Manager ${userName}!`);
-console.log(`You are currently in ${currentDirectory}`);
-
-function outputProcess() {
-  rl.question('', (input) => {
-    inputUserCommand(input);
-  });
+const question = promisify(rl.question).bind(rl);
+async function askUserInput(prompt) {
+  return await question(prompt);
 }
-outputProcess();
+
 
 
 function exitCommandLine() {
@@ -43,35 +27,39 @@ function exitCommandLine() {
   rl.close();
   process.exit();
 }
-import path from 'path';
 
-function upDirectory() {
-  let parentDirectory = path.resolve(currentDirectory, '..');
-  if (path.relative(parentDirectory, path.sep) === '') {
-    console.log('Cannot go above the root directory.');
-  } else {
-    currentDirectory = parentDirectory;
+async function start() {
+  console.log(`Welcome to the File Manager ${userName}!`);
+  console.log(`You are currently in ${currentDirectory}`);
+
+  
+
+  rl.on('SIGINT', () => {
+    exitCommandLine();
+  });
+  while(true) {
+    try {
+      const userInputValue = await askUserInput('> ');
+      const [command, ...userArgs] = userInputValue.split(" ");
+      switch(command) {
+        case '.exit':
+          exitCommandLine();
+          break;
+        case '':
+          console.log('Invalid empty input.Please enter a command.');
+          break;
+        case 'up':
+        case 'cd..':
+          const newDir = await upDirectory(currentDirectory);
+          currentDirectory = newDir;
+          break;
+        default:
+          console.log(`Unknown operation "${command}"`);
+          break;
+      }
+    } catch {
+      console.error(`Operation failed`);
+    }
   }
 }
-
-async function inputUserCommand(input) {
-  const command = input;
-  switch(command) {
-    case '.exit':
-      exitCommandLine()
-    case '':
-      getMessage('Invalid empty input.Please enter a command.');
-      outputProcess();
-      break
-    case 'up':
-    case 'cd..':
-      upDirectory();
-      getMessage(`You are currently in ${currentDirectory}`);
-      outputProcess();
-      break;
-    default:
-      getMessage(`Unknown operation "${command}"`);
-      outputProcess();
-      break;
-  }
-}
+export default start();
