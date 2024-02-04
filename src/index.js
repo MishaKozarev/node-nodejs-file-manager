@@ -6,6 +6,7 @@ import { exitSignin, exitCommandLine } from './exit/exitCommandLine.js';
 import { getUserName } from './utils/userName.js';
 import { askUserInput } from './utils/askUserInput.js';
 import { catCommand as readFile } from './basic/cat.js'
+import { addCommand as addFile } from './basic/add.js'
 
 async function start() {
   const userName = getUserName();
@@ -47,6 +48,9 @@ async function start() {
           break;
         case 'cat':
           await readFile(userArguments.join(' '));
+          break;
+        case 'add':
+          await addFile(userArguments.join(' '), currentDirectory);
           break;
         default:
           console.log(`Unknown operation "${command}"`);
