@@ -5,8 +5,9 @@ import { displayFilesAndFolders } from './ls/listOfFilesAndFolders.js';
 import { exitSignin, exitCommandLine } from './exit/exitCommandLine.js';
 import { getUserName } from './utils/userName.js';
 import { askUserInput } from './utils/askUserInput.js';
-import { catCommand as readFile } from './basic/cat.js'
-import { addCommand as addFile } from './basic/add.js'
+import { catCommand as readFile } from './basic/cat.js';
+import { addCommand as addFile } from './basic/add.js';
+import { rnCommand as renameFile } from './basic/rn.js';
 
 async function start() {
   const userName = getUserName();
@@ -51,6 +52,9 @@ async function start() {
           break;
         case 'add':
           await addFile(userArguments.join(' '), currentDirectory);
+          break;
+        case 'rn':
+          await renameFile(userArguments);
           break;
         default:
           console.log(`Unknown operation "${command}"`);
