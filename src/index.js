@@ -8,9 +8,10 @@ import { askUserInput } from './utils/askUserInput.js';
 import { catCommand as readFile } from './basic/cat.js';
 import { addCommand as addFile } from './basic/add.js';
 import { rnCommand as renameFile } from './basic/rn.js';
-import { cpCommand as copyFile  } from './basic/cp.js';
-import { mvCommand as moveFile  } from './basic/mv.js';
-import { rmCommand as removeFile  } from './basic/rm.js';
+import { cpCommand as copyFile } from './basic/cp.js';
+import { mvCommand as moveFile } from './basic/mv.js';
+import { rmCommand as removeFile } from './basic/rm.js';
+import { osCommand as getDataOs } from './os/os.js';
 
 async function start() {
   const userName = getUserName();
@@ -67,6 +68,9 @@ async function start() {
           break;
         case 'rm':
           await removeFile(...userArguments);
+          break;
+        case 'os':
+          await getDataOs(...userArguments);
           break;
         default:
           console.log(`Unknown operation "${command}"`);
