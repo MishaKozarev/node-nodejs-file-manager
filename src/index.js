@@ -12,6 +12,7 @@ import { cpCommand as copyFile } from './basic/cp.js';
 import { mvCommand as moveFile } from './basic/mv.js';
 import { rmCommand as removeFile } from './basic/rm.js';
 import { osCommand as getDataOs } from './os/os.js';
+import { hashCommand as getHash } from './hash/hash.js';
 
 async function start() {
   const userName = getUserName();
@@ -71,6 +72,9 @@ async function start() {
           break;
         case 'os':
           await getDataOs(...userArguments);
+          break;
+        case 'hash':
+          await getHash(...userArguments);
           break;
         default:
           console.log(`Unknown operation "${command}"`);
