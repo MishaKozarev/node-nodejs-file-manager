@@ -13,6 +13,7 @@ import { mvCommand as moveFile } from './basic/mv.js';
 import { rmCommand as removeFile } from './basic/rm.js';
 import { osCommand as getDataOs } from './os/os.js';
 import { hashCommand as getHash } from './hash/hash.js';
+import { compressCommand as compressFile } from './zip/compress.js';
 
 async function start() {
   const userName = getUserName();
@@ -75,6 +76,9 @@ async function start() {
           break;
         case 'hash':
           await getHash(...userArguments);
+          break;
+        case 'compress':
+          await compressFile(userArguments);
           break;
         default:
           console.log(`Unknown operation "${command}"`);
