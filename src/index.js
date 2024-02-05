@@ -10,6 +10,7 @@ import { addCommand as addFile } from './basic/add.js';
 import { rnCommand as renameFile } from './basic/rn.js';
 import { cpCommand as copyFile  } from './basic/cp.js';
 import { mvCommand as moveFile  } from './basic/mv.js';
+import { rmCommand as removeFile  } from './basic/rm.js';
 
 async function start() {
   const userName = getUserName();
@@ -63,6 +64,9 @@ async function start() {
           break;
         case 'mv':
           await moveFile(userArguments);
+          break;
+        case 'rm':
+          await removeFile(...userArguments);
           break;
         default:
           console.log(`Unknown operation "${command}"`);
