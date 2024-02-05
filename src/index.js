@@ -9,6 +9,7 @@ import { catCommand as readFile } from './basic/cat.js';
 import { addCommand as addFile } from './basic/add.js';
 import { rnCommand as renameFile } from './basic/rn.js';
 import { cpCommand as copyFile  } from './basic/cp.js';
+import { mvCommand as moveFile  } from './basic/mv.js';
 
 async function start() {
   const userName = getUserName();
@@ -59,6 +60,9 @@ async function start() {
           break;
         case 'cp':
           await copyFile(userArguments);
+          break;
+        case 'mv':
+          await moveFile(userArguments);
           break;
         default:
           console.log(`Unknown operation "${command}"`);
